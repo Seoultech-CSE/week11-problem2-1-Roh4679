@@ -9,6 +9,9 @@ class InsufficientBalanceException extends Exception {
 
     public InsufficientBalanceException(double balance, double amount) {
 
+        super("Insufficient balance. Current balance: $" 
+                + balance + ", Requested amount: $" + amount);
+
         this.balance = balance;
         this.amount = amount;
     }
@@ -37,9 +40,9 @@ public class BankAccount {
 
     public void deposit(double amount) {
 
-        // amount <= 0 이면 예외 발생
         if (amount <= 0) {
-            throw new IllegalArgumentException();
+            throw new IllegalArgumentException(
+                    "Deposit amount must be greater than 0.");
         }
 
         balance += amount;
@@ -47,11 +50,9 @@ public class BankAccount {
         System.out.println("$" + amount + " successfully deposited.");
     }
 
-    // Checked Exception 선언
     public void withdraw(double amount)
             throws InsufficientBalanceException {
 
-        // 잔액 부족 시 사용자 정의 예외 발생
         if (amount > balance) {
             throw new InsufficientBalanceException(balance, amount);
         }
@@ -67,7 +68,9 @@ public class BankAccount {
 
         BankAccount account = new BankAccount(500.0);
 
-        System.out.println("=== Welcome to the Interactive Banking System ===");
+        System.out.println(
+                "=== Welcome to the Interactive Banking System ===");
+
         System.out.println("Initial Balance: $500.0");
 
         // --- DEPOSIT PROCESS ---
@@ -87,7 +90,7 @@ public class BankAccount {
 
         } catch (IllegalArgumentException e) {
 
-            System.out.println("Deposit amount must be positive.");
+            System.out.println(e.getMessage());
 
         } finally {
 
@@ -112,11 +115,7 @@ public class BankAccount {
 
         } catch (InsufficientBalanceException e) {
 
-            System.out.println(
-                    "Insufficient balance. Current balance: $"
-                    + e.getBalance()
-                    + ", Requested amount: $"
-                    + e.getAmount());
+            System.out.println(e.getMessage());
 
         } finally {
 
@@ -124,7 +123,8 @@ public class BankAccount {
                     "Current Balance: $" + account.getBalance());
         }
 
-        System.out.println("\n=== Thank you for using our service ===");
+        System.out.println(
+                "\n=== Thank you for using our service ===");
 
         input.close();
     }
